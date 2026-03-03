@@ -68,7 +68,7 @@ Eğer projeyi yerel bilgisayarınızda çalıştırmak isterseniz aşağıdaki a
     ```bash
     npm run dev
     ```
-    Tarayıcınızda `http://localhost:5173` adresine giderek siteyi görüntüleyebilirsiniz.
+    Tarayıcınızda `http://localhost:xxxx` adresine giderek siteyi görüntüleyebilirsiniz.
 
 ---
 *Müzikle ve sevgiyle kalın!* 🎵
