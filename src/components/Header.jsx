@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import OptimizedImage from './OptimizedImage';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
 
@@ -14,46 +14,34 @@ const Header = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const isStorePage = location.pathname === '/store';
-    const isCollabPage = location.pathname === '/collab';
-    const isBlogPage = location.pathname.startsWith('/blog');
-    const isMediaPage = location.pathname === '/media';
-    const isPodcastPage = location.pathname === '/podcast';
-    const isContactPage = location.pathname === '/contact';
-    const isAboutPage = location.pathname === '/about';
+
+    // Extract lang from URL path
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const lang = ['tr', 'en'].includes(pathParts[0]) ? pathParts[0] : 'tr';
+    const altLang = lang === 'tr' ? 'en' : 'tr';
+
+    // Determine current page from URL (after lang prefix)
+    const currentPage = pathParts[1] || 'home';
+
+    const isStorePage = currentPage === 'store';
+    const isCollabPage = currentPage === 'collab';
+    const isBlogPage = currentPage === 'blog';
+    const isMediaPage = currentPage === 'media';
+    const isPodcastPage = currentPage === 'podcast';
+    const isContactPage = currentPage === 'contact';
+    const isAboutPage = currentPage === 'about';
 
     React.useEffect(() => {
         const handleScroll = () => {
             setIsSticky(window.scrollY > 50);
 
-            if (isStorePage) {
-                setActiveSection('store');
-                return;
-            }
-            if (isAboutPage) {
-                setActiveSection('about');
-                return;
-            }
-            if (isCollabPage) {
-                setActiveSection('collab');
-                return;
-            }
-            if (isBlogPage) {
-                setActiveSection('blog');
-                return;
-            }
-            if (isMediaPage) {
-                setActiveSection('media');
-                return;
-            }
-            if (isPodcastPage) {
-                setActiveSection('podcast');
-                return;
-            }
-            if (isContactPage) {
-                setActiveSection('contact');
-                return;
-            }
+            if (isStorePage) { setActiveSection('store'); return; }
+            if (isAboutPage) { setActiveSection('about'); return; }
+            if (isCollabPage) { setActiveSection('collab'); return; }
+            if (isBlogPage) { setActiveSection('blog'); return; }
+            if (isMediaPage) { setActiveSection('media'); return; }
+            if (isPodcastPage) { setActiveSection('podcast'); return; }
+            if (isContactPage) { setActiveSection('contact'); return; }
 
             // Active section logic for Homepage
             const sections = ['home', 'about', 'media', 'podcast', 'contact'];
@@ -73,7 +61,7 @@ const Header = () => {
         };
 
         window.addEventListener('scroll', handleScroll);
-        handleScroll(); // Trigger once
+        handleScroll();
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isStorePage, isCollabPage, isBlogPage, isMediaPage, isPodcastPage, isContactPage, isAboutPage]);
@@ -94,55 +82,29 @@ const Header = () => {
     const handleNavClick = (e, item) => {
         e.preventDefault();
         const sectionId = item.toLowerCase();
-        setIsMenuOpen(false); // Close menu on click
+        setIsMenuOpen(false);
 
-        if (sectionId === 'store') {
-            navigate('/store');
-            return;
-        }
-
-        if (sectionId === 'about') {
-            navigate('/about');
-            return;
-        }
-
-        if (sectionId === 'collab') {
-            navigate('/collab');
-            return;
-        }
-
-        if (sectionId === 'blog') {
-            navigate('/blog');
-            return;
-        }
-
-        if (sectionId === 'media') {
-            navigate('/media');
-            return;
-        }
-
-        if (sectionId === 'podcast') {
-            navigate('/podcast');
-            return;
-        }
-
-        if (sectionId === 'contact') {
-            navigate('/contact');
-            return;
-        }
+        const isOnSubPage = isStorePage || isCollabPage || isBlogPage || isMediaPage || isContactPage || isPodcastPage || isAboutPage;
 
         if (sectionId === 'home') {
-            if (isStorePage || isCollabPage || isBlogPage || isMediaPage || isContactPage || isPodcastPage || isAboutPage) {
-                navigate('/');
+            if (isOnSubPage) {
+                navigate(`/${lang}/`);
             } else {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
             return;
         }
 
-        // For other sections (Contact, etc. that might still be anchors but not yet pages)
-        if (isStorePage || isCollabPage || isBlogPage || isMediaPage || isPodcastPage || isContactPage || isAboutPage) {
-            navigate('/');
+        // All named pages navigate to /:lang/:page
+        const pages = ['store', 'about', 'collab', 'blog', 'media', 'podcast', 'contact'];
+        if (pages.includes(sectionId)) {
+            navigate(`/${lang}/${sectionId}`);
+            return;
+        }
+
+        // For other sections that might still be anchors on the home page
+        if (isOnSubPage) {
+            navigate(`/${lang}/`);
             setTimeout(() => {
                 const element = document.getElementById(sectionId);
                 if (element) element.scrollIntoView({ behavior: 'smooth' });
@@ -153,6 +115,12 @@ const Header = () => {
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         }
+    };
+
+    const handleLanguageChange = (newLang) => {
+        // Replace the lang prefix in the current URL
+        const pathWithoutLang = location.pathname.replace(/^\/[a-z]{2}/, '');
+        navigate(`/${newLang}${pathWithoutLang || '/'}`);
     };
 
     const navItems = ['Home', 'About', 'Collab', 'Media', 'Podcast', 'Blog', 'Store', 'Contact'];
@@ -180,7 +148,7 @@ const Header = () => {
 
                 <div className="header-content">
                     <div className="logo-container">
-                        <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); setIsMenuOpen(false); }}>
+                        <a href={`/${lang}/`} onClick={(e) => { e.preventDefault(); navigate(`/${lang}/`); setIsMenuOpen(false); }}>
                             <OptimizedImage
                                 src="/genesi_nova.svg"
                                 alt="Genesi Nova Logo"
@@ -192,7 +160,7 @@ const Header = () => {
                     {/* Mobile Toggle & Language Switcher Layout Control */}
                     <div className="mobile-header-actions">
                         <div className="mobile-lang-wrapper">
-                            <LanguageDropdown currentLang={i18n.language} onLangChange={(lang) => i18n.changeLanguage(lang)} />
+                            <LanguageDropdown currentLang={lang} onLangChange={handleLanguageChange} />
                         </div>
 
                         <button
@@ -218,14 +186,9 @@ const Header = () => {
                                 const sectionId = item.toLowerCase();
                                 const isActive = activeSection === sectionId;
 
-                                let href = `/#${sectionId}`;
-                                if (sectionId === 'store') href = '/store';
-                                if (sectionId === 'about') href = '/about';
-                                if (sectionId === 'collab') href = '/collab';
-                                if (sectionId === 'blog') href = '/blog';
-                                if (sectionId === 'media') href = '/media';
-                                if (sectionId === 'podcast') href = '/podcast';
-                                if (sectionId === 'contact') href = '/contact';
+                                const href = sectionId === 'home'
+                                    ? `/${lang}/`
+                                    : `/${lang}/${sectionId}`;
 
                                 return (
                                     <React.Fragment key={item}>
@@ -249,7 +212,7 @@ const Header = () => {
 
                             {/* Pinned Language Switcher with World Icon (Desktop) */}
                             <li key="lang-switcher" className="lang-switcher-item desktop-only">
-                                <LanguageDropdown currentLang={i18n.language} onLangChange={(lang) => i18n.changeLanguage(lang)} />
+                                <LanguageDropdown currentLang={lang} onLangChange={handleLanguageChange} />
                             </li>
                         </motion.ul>
                     </nav>
@@ -273,6 +236,10 @@ const Header = () => {
                                     const sectionId = item.toLowerCase();
                                     const isActive = activeSection === sectionId;
 
+                                    const href = sectionId === 'home'
+                                        ? `/${lang}/`
+                                        : `/${lang}/${sectionId}`;
+
                                     return (
                                         <motion.li
                                             key={item}
@@ -281,7 +248,7 @@ const Header = () => {
                                             transition={{ delay: index * 0.05 + 0.2 }}
                                         >
                                             <a
-                                                href={`/#${sectionId}`}
+                                                href={href}
                                                 className={`mobile-nav-link ${isActive ? 'active' : ''}`}
                                                 onClick={(e) => handleNavClick(e, item)}
                                             >

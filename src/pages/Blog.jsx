@@ -1,127 +1,114 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ScrollReveal from '../components/ScrollReveal';
 import TypewriterText from '../components/TypewriterText';
 import OptimizedImage from '../components/OptimizedImage';
 import HeroTypewriterHeadlines from '../components/HeroTypewriterHeadlines';
+import SEOHead from '../components/SEOHead';
+import { POSTS, getLocalizedPost } from '../data/blogPosts';
 import './Blog.css';
 
-// Import Assets
-// Import Assets
 import manifest from '../lib/media/manifest.json';
 import instagramIcon from '../assets/icons/instagram.svg';
 import twitterIcon from '../assets/icons/twitter.svg';
 
-const blogMain = manifest['blog-hero'];
-const choirImg = manifest['choir-hero'];
-const podcastImg = manifest['podcast-hero'];
-// Reuse the same assets for small versions, the component handles sizing
-const blogSmall = manifest['blog-hero'];
-const choirSmall = manifest['choir-hero'];
-
-import { POSTS } from '../data/blogPosts';
-import { useTranslation } from 'react-i18next';
-
-// Fallback headlines if POSTS is empty (though unlikely)
-const FALLBACK_HEADLINES = {
-    en: [
-        "The Resurgence of Polyphony in Modern Pop",
-        "Echoes from the Past: The Making of Our New Album",
-        "The Science of Harmony: Why We Love Chords",
-        "Vocal Health 101 for Touring Choirs"
-    ],
-    tr: [
-        "Modern Popta Polifoninin Yeniden Doğuşu",
-        "Geçmişten Yankılar: Yeni Albümümüzün Hazırlığı",
-        "Armoni Bilimi: Akorları Neden Seviyoruz?",
-        "Korolar İçin Ses Sağlığı Rehberi"
-    ]
-};
-
 const Blog = () => {
-    const { i18n } = useTranslation();
-    const currentLang = i18n.language || 'tr';
+    const { i18n, t } = useTranslation();
+    const { lang } = useParams();
+    const currentLang = lang || i18n.language || 'tr';
+    const altLang = currentLang === 'tr' ? 'en' : 'tr';
 
     const navigate = useNavigate();
-    // Refs for dynamic typewriter positioning
     const subscribeCtaRef = useRef(null);
     const notebookRef = useRef(null);
     const introRef = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
 
-    // Properly detect mobile devices with useEffect
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth <= 768);
         };
-
-        // Check on mount
         checkMobile();
-
-        // Add resize listener
         window.addEventListener('resize', checkMobile);
-
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // Parallax Logic matching Home Page
     const { scrollYProgress } = useScroll({
         target: introRef,
         offset: ["start start", "end start"]
     });
 
-    // Dynamically get headlines from real blog posts
-    // We prioritize real post titles, fall back to language-specific defaults
+    // Dynamically get headlines from real blog posts (localized)
+    const FALLBACK_HEADLINES = {
+        en: [
+            "The Resurgence of Polyphony in Modern Pop",
+            "Echoes from the Past: The Making of Our New Album",
+            "The Science of Harmony: Why We Love Chords",
+            "Vocal Health 101 for Touring Choirs"
+        ],
+        tr: [
+            "Modern Popta Polifoninin Yeniden Doğuşu",
+            "Geçmişten Yankılar: Yeni Albümümüzün Hazırlığı",
+            "Armoni Bilimi: Akorları Neden Seviyoruz?",
+            "Korolar İçin Ses Sağlığı Rehberi"
+        ]
+    };
+
     const TYPEWRITER_HEADLINES = POSTS.length > 0
-        ? POSTS.map(post => post.title)
+        ? POSTS.map(post => {
+            const localized = getLocalizedPost(post, currentLang);
+            return localized.localTitle;
+        })
         : (FALLBACK_HEADLINES[currentLang] || FALLBACK_HEADLINES.en);
 
     const yContent = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "100%"]);
     const opacityContent = useTransform(scrollYProgress, [0, 0.5], [1, isMobile ? 1 : 0]);
 
-
-
     const handleSubscribeScroll = () => {
         const newsletterSection = document.getElementById('newsletter-section');
         if (newsletterSection) {
-            const isMobile = window.innerWidth <= 768;
+            const isMobileCheck = window.innerWidth <= 768;
 
-            if (isMobile) {
-                // Mobile: Custom scroll with larger offset to prevent footer overshoot
+            if (isMobileCheck) {
                 const targetPosition = newsletterSection.getBoundingClientRect().top + window.pageYOffset;
-                const offset = 180; // Generous offset for mobile - lands above footer
-                window.scrollTo({
-                    top: targetPosition - offset,
-                    behavior: 'smooth'
-                });
+                const offset = 180;
+                window.scrollTo({ top: targetPosition - offset, behavior: 'smooth' });
             } else {
-                // Desktop: Use scrollIntoView with scroll-margin-top
-                newsletterSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                    // Respects scroll-margin-top CSS property for proper offset
-                });
+                newsletterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
             newsletterSection.classList.add('highlight-subtly');
-            setTimeout(() => {
-                newsletterSection.classList.remove('highlight-subtly');
-            }, 2000);
+            setTimeout(() => { newsletterSection.classList.remove('highlight-subtly'); }, 2000);
         }
     };
 
+    // SEO meta
+    const seoTitle = currentLang === 'tr'
+        ? 'Blog | Genesi Nova Korosu'
+        : 'Blog | Genesi Nova Choir';
+    const seoDesc = currentLang === 'tr'
+        ? 'Genesi Nova\'nın müzik dünyasından hikâyeler, ilhamlar ve sahne arkası yazıları.'
+        : 'Stories, inspirations, and behind-the-scenes writings from the world of Genesi Nova.';
+
     return (
         <div className="blog-page">
+            <SEOHead
+                title={seoTitle}
+                description={seoDesc}
+                canonical={`/${currentLang}/blog`}
+                lang={currentLang}
+                altLang={altLang}
+                altPath={`/${altLang}/blog`}
+            />
+
             <main>
-                {/* Intro Section - Editorial Opening */}
+                {/* Intro Section */}
                 <section
                     ref={introRef}
                     className="blog-intro-section"
-                    style={{
-                        position: 'relative',
-                        zIndex: 10
-                    }}
+                    style={{ position: 'relative', zIndex: 10 }}
                 >
                     <motion.div
                         style={{
@@ -140,7 +127,7 @@ const Blog = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                             >
-                                The Notebook
+                                {currentLang === 'tr' ? 'Günlük' : 'The Notebook'}
                             </motion.div>
                             <motion.h1
                                 className="blog-intro-headline"
@@ -148,9 +135,11 @@ const Blog = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             >
-                                Ideas behind the music,
-                                <br />
-                                <span className="italic">Inspirations shaping our journey.</span>
+                                {currentLang === 'tr' ? (
+                                    <>Müziğin ardındaki fikirler,<br /><span className="italic">yolculuğumuza ilham veren düşünceler.</span></>
+                                ) : (
+                                    <>Ideas behind the music,<br /><span className="italic">Inspirations shaping our journey.</span></>
+                                )}
                             </motion.h1>
 
                             <motion.button
@@ -161,18 +150,16 @@ const Blog = () => {
                                 transition={{ duration: 0.8, delay: 0.8 }}
                                 onClick={handleSubscribeScroll}
                             >
-                                Subscribe to our Notebook
+                                {currentLang === 'tr' ? 'Günlüğümüze Abone Ol' : 'Subscribe to our Notebook'}
                             </motion.button>
                         </div>
 
-                        {/* Center-Screen Typewriter Headlines */}
                         <HeroTypewriterHeadlines
                             headlines={TYPEWRITER_HEADLINES}
                             subscribeRef={subscribeCtaRef}
                             notebookRef={notebookRef}
                         />
 
-                        {/* Notebook Icon - Bottom Positioned */}
                         <motion.div
                             ref={notebookRef}
                             className="notebook-group"
@@ -184,10 +171,7 @@ const Blog = () => {
                                 if (target) {
                                     const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
                                     const offset = 100;
-                                    window.scrollTo({
-                                        top: targetPosition - offset,
-                                        behavior: 'smooth'
-                                    });
+                                    window.scrollTo({ top: targetPosition - offset, behavior: 'smooth' });
                                 }
                             }}
                         >
@@ -202,80 +186,88 @@ const Blog = () => {
                                     marginBottom: '8px'
                                 }}
                             />
-                            <span className="notebook-label">READ OUR NOTEBOOK</span>
+                            <span className="notebook-label">
+                                {currentLang === 'tr' ? 'GÜNLÜĞÜMÜZÜ OKU' : 'READ OUR NOTEBOOK'}
+                            </span>
                         </motion.div>
                     </motion.div>
                 </section>
 
                 {/* Main Grid */}
                 <div id="blog-grid" className="blog-grid" style={{ marginTop: '4rem' }}>
-                    {POSTS.slice(0, 3).map((post, index) => (
-                        <ScrollReveal key={post.id} delay={index * 0.1}>
-                            <div
-                                className="blog-card"
-                                onClick={() => navigate(`/blog/${post.id}`)}
-                                role="link"
-                                tabIndex={0}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <div className="blog-card-image-wrapper">
-                                    <OptimizedImage
-                                        src={post.image}
-                                        alt={post.title}
-                                        className="blog-card-img"
-                                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                                    />
-                                </div>
-                                <div className="blog-card-content">
-                                    <div className="blog-card-meta">
-                                        <span className="category-tag">{post.category}</span>
-                                        <span className="divider">•</span>
-                                        <span className="read-time">{post.readTime}</span>
-                                    </div>
-                                    <h3 className="blog-card-title">{post.title}</h3>
-                                    <p className="blog-card-excerpt">{post.excerpt}</p>
-                                    {/* Author Metadata Block */}
-                                    <div className="author-metadata">
-                                        <div className="author-info">
-                                            <div
-                                                className="author-avatar"
-                                                style={{ backgroundColor: post.author.avatarColor }}
-                                            >
-                                                {post.author.initials}
+                    {POSTS.slice(0, 3).map((post, index) => {
+                        const localized = getLocalizedPost(post, currentLang);
+                        return (
+                            <ScrollReveal key={post.id} delay={index * 0.1}>
+                                <Link
+                                    to={`/${currentLang}/blog/${post.slug}`}
+                                    style={{ textDecoration: 'none', display: 'block' }}
+                                >
+                                    <div
+                                        className="blog-card"
+                                        role="link"
+                                        tabIndex={0}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <div className="blog-card-image-wrapper">
+                                            <OptimizedImage
+                                                src={post.image}
+                                                alt={localized.localTitle}
+                                                className="blog-card-img"
+                                                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                                            />
+                                        </div>
+                                        <div className="blog-card-content">
+                                            <div className="blog-card-meta">
+                                                <span className="category-tag">{localized.localCategory}</span>
+                                                <span className="divider">•</span>
+                                                <span className="read-time">{localized.localReadTime}</span>
                                             </div>
-                                            <div className="author-details">
-                                                <div className="author-name">{post.author.name}</div>
-                                                <time className="post-date">{post.date}</time>
+                                            <h3 className="blog-card-title">{localized.localTitle}</h3>
+                                            <p className="blog-card-excerpt">{localized.localExcerpt}</p>
+                                            <div className="author-metadata">
+                                                <div className="author-info">
+                                                    <div
+                                                        className="author-avatar"
+                                                        style={{ backgroundColor: post.author.avatarColor }}
+                                                    >
+                                                        {post.author.initials}
+                                                    </div>
+                                                    <div className="author-details">
+                                                        <div className="author-name">{post.author.name}</div>
+                                                        <time className="post-date">{localized.localDate}</time>
+                                                    </div>
+                                                </div>
+                                                <div className="author-social">
+                                                    <span className="follow-label">
+                                                        {currentLang === 'tr' ? 'Takip Et' : 'Follow'}
+                                                    </span>
+                                                    <a
+                                                        href={post.author.instagram}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="social-link"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <img src={instagramIcon} alt="Instagram" />
+                                                    </a>
+                                                    <a
+                                                        href={post.author.twitter}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="social-link"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <img src={twitterIcon} alt="Twitter" />
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="author-social">
-                                            <span className="follow-label">Follow</span>
-                                            <a
-                                                href={post.author.instagram}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="social-link"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <img src={instagramIcon} alt="Instagram" />
-                                            </a>
-                                            <a
-                                                href={post.author.twitter}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="social-link"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <img src={twitterIcon} alt="Twitter" />
-                                            </a>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </ScrollReveal>
-                    ))}
-
-
+                                </Link>
+                            </ScrollReveal>
+                        );
+                    })}
                 </div>
             </main>
         </div>

@@ -1,8 +1,36 @@
 {
     "rewrites": [
         {
-            "source": "/(.*)",
-            "destination": "/"
+            "source": "/tr/(.*)",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/en/(.*)",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/((?!assets|favicon|genesi_nova|robots|sitemap|arrow|contact|collab).*)",
+            "destination": "/index.html"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/sitemap.xml",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/xml"
+                }
+            ]
+        },
+        {
+            "source": "/robots.txt",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "text/plain"
+                }
+            ]
         }
     ]
 }

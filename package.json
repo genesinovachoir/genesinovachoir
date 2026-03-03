@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-sitemap.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "optimize-media": "node scripts/optimize.js"
+    "optimize-media": "node scripts/optimize.js",
+    "generate-sitemap": "node scripts/generate-sitemap.js --public"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",

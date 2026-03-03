@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { submitContactMessage } from '../lib/contactService';
-
-
 import OptimizedImage from '../components/OptimizedImage';
+import SEOHead from '../components/SEOHead';
 import './Contact.css';
 
 // Import Social Icons (Reuse existing assets)
@@ -15,6 +15,9 @@ import linkedinIcon from '../assets/icons/linkedin.svg';
 
 const Contact = () => {
     const { t } = useTranslation();
+    const { lang } = useParams();
+    const currentLang = lang || 'tr';
+    const altLang = currentLang === 'tr' ? 'en' : 'tr';
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -83,6 +86,14 @@ const Contact = () => {
 
     return (
         <div className="contact-page">
+            <SEOHead
+                title={currentLang === 'tr' ? 'İletişim | Genesi Nova Korosu' : 'Contact | Genesi Nova Choir'}
+                description={currentLang === 'tr' ? 'Genesi Nova ile iletişime geçin. Konser, atölye, iş birliği veya sadece merhaba demek için.' : 'Get in touch with Genesi Nova. For concerts, workshops, collaborations, or just to say hello.'}
+                canonical={`/${currentLang}/contact`}
+                lang={currentLang}
+                altLang={altLang}
+                altPath={`/${altLang}/contact`}
+            />
             {/* Cinematic Background Layer */}
             <motion.div
                 className="contact-bg-container"

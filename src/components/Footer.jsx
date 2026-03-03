@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
@@ -34,6 +34,9 @@ const SocialIcon = ({ name, href, src }) => (
 
 const Footer = () => {
     const { t } = useTranslation();
+    const location = useLocation();
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const lang = ['tr', 'en'].includes(pathParts[0]) ? pathParts[0] : 'tr';
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [status, setStatus] = useState('idle'); // idle, submitting, success
@@ -191,10 +194,10 @@ const Footer = () => {
                         <div>
                             <span className="footer-col-title">{t('footer.more_about')}</span>
                             <div className="footer-links">
-                                <Link to="/about" className="footer-link">{t('footer.about_us')}</Link>
-                                <Link to="/contact" className="footer-link">{t('footer.contact')}</Link>
-                                <Link to="/store" className="footer-link">{t('header.store')}</Link>
-                                <Link to="/collab" className="footer-link">{t('footer.collab')}</Link>
+                                <Link to={`/${lang}/about`} className="footer-link">{t('footer.about_us')}</Link>
+                                <Link to={`/${lang}/contact`} className="footer-link">{t('footer.contact')}</Link>
+                                <Link to={`/${lang}/store`} className="footer-link">{t('header.store')}</Link>
+                                <Link to={`/${lang}/collab`} className="footer-link">{t('footer.collab')}</Link>
                             </div>
                         </div>
 
@@ -203,9 +206,9 @@ const Footer = () => {
                             <span className="footer-col-title">{t('footer.creative_works')}</span>
                             <div className="footer-links">
                                 <Link to="/choir" className="footer-link">{t('footer.choir')}</Link>
-                                <Link to="/podcast" className="footer-link">{t('header.podcast')}</Link>
-                                <Link to="/media" className="footer-link">{t('header.media')}</Link>
-                                <Link to="/blog" className="footer-link">{t('header.blog')}</Link>
+                                <Link to={`/${lang}/podcast`} className="footer-link">{t('header.podcast')}</Link>
+                                <Link to={`/${lang}/media`} className="footer-link">{t('header.media')}</Link>
+                                <Link to={`/${lang}/blog`} className="footer-link">{t('header.blog')}</Link>
                             </div>
                         </div>
                     </div>

@@ -1,30 +1,27 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 import en from './locales/en.json';
 import tr from './locales/tr.json';
 
 i18n
-    .use(LanguageDetector)
     .use(initReactI18next)
     .init({
         resources: {
             en: {
-                translation: en.translation, // Or just en if your json structure is flat
+                translation: en.translation,
             },
             tr: {
-                translation: tr.translation, // Or just tr
+                translation: tr.translation,
             },
         },
-        fallbackLng: 'en',
+        fallbackLng: 'tr', // Turkish is default
         interpolation: {
-            escapeValue: false, // React already safe from XSS
+            escapeValue: false,
         },
-        detection: {
-            order: ['queryString', 'cookie', 'localStorage', 'navigator'],
-            caches: ['localStorage', 'cookie'],
-        },
+        // Language is now determined by URL, not browser detection.
+        // LanguageSync component handles syncing URL → i18n.
+        detection: false,
     });
 
 export default i18n;

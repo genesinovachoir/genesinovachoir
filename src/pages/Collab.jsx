@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation, Trans } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import OptimizedImage from '../components/OptimizedImage';
+import SEOHead from '../components/SEOHead';
 import { supabase } from '../lib/supabaseClient';
 import './Collab.css';
 
 const Collab = () => {
     const { t } = useTranslation();
+    const { lang } = useParams();
+    const currentLang = lang || 'tr';
+    const altLang = currentLang === 'tr' ? 'en' : 'tr';
     const [selectedOption, setSelectedOption] = useState(null);
     const [status, setStatus] = useState('idle'); // idle, submitting, success, error
     const [formData, setFormData] = useState({
@@ -96,6 +101,14 @@ const Collab = () => {
 
     return (
         <div className="collab-page">
+            <SEOHead
+                title={currentLang === 'tr' ? 'İş Birliği | Genesi Nova Korosu' : 'Collaboration | Genesi Nova Choir'}
+                description={currentLang === 'tr' ? 'Genesi Nova ile iş birliği yapın. Sanatçılar, kurumlar ve fikirler için ortak bir buluşma noktası.' : 'Collaborate with Genesi Nova. A shared meeting point for artists, institutions, and ideas.'}
+                canonical={`/${currentLang}/collab`}
+                lang={currentLang}
+                altLang={altLang}
+                altPath={`/${altLang}/collab`}
+            />
 
             {/* ═══════════════════════════════════════════════════════════════
                 HERO SECTION

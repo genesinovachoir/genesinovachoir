@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { subscribeUser } from '../lib/subscriberService';
+import SEOHead from '../components/SEOHead';
 import './Podcast.css';
 
 const Podcast = () => {
     const { t } = useTranslation();
+    const { lang } = useParams();
+    const currentLang = lang || 'tr';
+    const altLang = currentLang === 'tr' ? 'en' : 'tr';
     const [email, setEmail] = useState('');
 
     const [isError, setIsError] = useState(false);
@@ -71,6 +76,14 @@ const Podcast = () => {
 
     return (
         <div className="podcast-page">
+            <SEOHead
+                title={currentLang === 'tr' ? 'Genova Podcast | Genesi Nova Korosu' : 'Genova Podcast | Genesi Nova Choir'}
+                description={currentLang === 'tr' ? 'Her şeyin merkezinde müziğin olduğu hikâyeler, fikirler ve sohbetler. Genesi Nova Podcast çok yakında.' : 'Stories, ideas, and conversations where music becomes the center of everything. Genesi Nova Podcast coming soon.'}
+                canonical={`/${currentLang}/podcast`}
+                lang={currentLang}
+                altLang={altLang}
+                altPath={`/${altLang}/podcast`}
+            />
             <section className="podcast-hero">
                 {/* Background - Animated for depth */}
                 <motion.div
