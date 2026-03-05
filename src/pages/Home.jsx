@@ -14,11 +14,11 @@ const Home = () => {
     const altLang = currentLang === 'tr' ? 'en' : 'tr';
 
     const seoTitle = currentLang === 'tr'
-        ? 'Genesi Nova Korosu | Çağdaş Polifonik Koro & Podcast'
-        : 'Genesi Nova Choir | Contemporary Polyphonic Choir & Podcast';
+        ? 'Genesi Nova Korosu | Çok Sesli Koro Topluluğu'
+        : 'Genesi Nova Choir | Polyphonic Choir Society';
     const seoDesc = currentLang === 'tr'
-        ? 'Genesi Nova — İstanbul merkezli bağımsız çağdaş a cappella korosu. Podcast, hikâyeler ve müzikal yolculuğumuzun bir parçası olun.'
-        : 'Genesi Nova — Independent contemporary a cappella choir based in Istanbul. Listen to our podcast, read our stories, and join our musical journey.';
+        ? 'Genesi Nova — İstanbul merkezli bağımsız çağdaş a cappella korosu. Hikâyelerimizin ve müzikal yolculuğumuzun bir parçası olun.'
+        : 'Genesi Nova — Independent contemporary a cappella choir based in Istanbul. Read our stories, and join our musical journey.';
 
     const orgJsonLd = {
         '@context': 'https://schema.org',
