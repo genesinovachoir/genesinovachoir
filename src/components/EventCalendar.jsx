@@ -16,16 +16,6 @@ const EVENTS = [
     },
     {
         id: 2,
-        title: 'Şalter x GeNova',
-        type: 'Concert',
-        date: '28',
-        month: 'Mar',
-        year: '2026',
-        location: 'Ortaköy Kethüda Hamamı',
-        capacity: '150–250'
-    },
-    {
-        id: 3,
         title: 'Ruhi Su x GeNova',
         type: 'Concert',
         date: '03',
@@ -35,17 +25,7 @@ const EVENTS = [
         capacity: '460'
     },
     {
-        id: 4,
-        title: 'KVK x GeNova Bağış Konseri',
-        type: 'Concert',
-        date: '08',
-        month: 'Apr',
-        year: '2026',
-        location: 'YTÜ Davutpaşa Kongre Merkezi',
-        capacity: '800–1000'
-    },
-    {
-        id: 5,
+        id: 3,
         title: '11. SANSEV Uluslararası Koro Festivali',
         type: 'Festival',
         date: '07–10',
@@ -55,7 +35,7 @@ const EVENTS = [
         capacity: '400–500'
     },
     {
-        id: 6,
+        id: 4,
         title: 'Acıbadem Üniversitesi Koro Festivali',
         type: 'Festival',
         date: '13',
@@ -65,7 +45,7 @@ const EVENTS = [
         capacity: '750'
     },
     {
-        id: 7,
+        id: 5,
         title: 'AAS Uluslararası Koro Festivali',
         type: 'Festival',
         date: '21–24',
