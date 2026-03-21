@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import TypewriterText from './TypewriterText';
 import OptimizedImage from './OptimizedImage';
 import './HeroSection.css';
 
@@ -46,7 +45,7 @@ const HeroSection = () => {
                 transform: 'translateZ(0)'
             }}
         >
-            {/* Parallax Background - Velvet Effect */}
+            {/* Parallax Background */}
             <motion.div
                 className="hero-bg"
                 style={{
@@ -57,10 +56,35 @@ const HeroSection = () => {
                     height: '120%',
                     y: yBg,
                     zIndex: 1,
-                    background: 'transparent',
                     willChange: isMobile ? 'auto' : 'transform'
                 }}
-            />
+            >
+                <img
+                    src="/koro/hero.webp"
+                    alt=""
+                    aria-hidden="true"
+                    loading="eager"
+                    fetchPriority="high"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                    }}
+                />
+                {/* Gradient overlay for text readability */}
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(to bottom, rgba(5,6,10,0.5) 0%, rgba(5,6,10,0.3) 40%, rgba(5,6,10,0.65) 100%)',
+                }} />
+            </motion.div>
 
             {/* Decorative Elements */}
 

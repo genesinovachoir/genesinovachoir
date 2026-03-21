@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import OptimizedImage from './OptimizedImage';
@@ -9,7 +9,6 @@ import instagramIcon from '../assets/icons/instagram.svg';
 import twitterIcon from '../assets/icons/twitter.svg';
 
 const BlogUpdates = () => {
-    const navigate = useNavigate();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [direction, setDirection] = useState(0);
 
@@ -68,7 +67,7 @@ const BlogUpdates = () => {
                     {/* Desktop Layout: Grid */}
                     <div className="home-blog-grid">
                         {displayPosts.map((post) => (
-                            <BlogCard key={post.id} post={post} navigate={navigate} />
+                            <BlogCard key={post.id} post={post} />
                         ))}
                     </div>
 
@@ -89,7 +88,7 @@ const BlogUpdates = () => {
                                     }}
                                     style={{ width: '100%' }}
                                 >
-                                    <BlogCard post={displayPosts[currentSlide]} navigate={navigate} />
+                                    <BlogCard post={displayPosts[currentSlide]} />
                                 </motion.div>
                             </AnimatePresence>
                         </div>
@@ -141,16 +140,18 @@ const BlogUpdates = () => {
 };
 
 // Reusable Card Component for this section
-const BlogCard = ({ post, navigate }) => {
+const BlogCard = ({ post }) => {
+    const navigate = useNavigate();
+    const { lang = 'tr' } = useParams();
     return (
         <article
             className="home-blog-card"
-            onClick={() => navigate(`/blog/${post.id}`)}
+            onClick={() => navigate(`/${lang}/blog/${post.slug}`)}
             role="link"
             tabIndex={0}
             onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                    navigate(`/blog/${post.id}`);
+                    navigate(`/${lang}/blog/${post.slug}`);
                 }
             }}
         >

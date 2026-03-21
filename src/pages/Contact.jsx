@@ -98,16 +98,17 @@ const Contact = () => {
             <motion.div
                 className="contact-bg-container"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.25 }}
+                animate={{ opacity: 0.45 }}
                 transition={{ duration: 2.5, ease: "easeOut" }}
             >
                 <img
-                    src="/contact.svg"
+                    src="/koro/iletisim.webp"
                     alt=""
                     className="contact-bg-image"
                     aria-hidden="true"
                     loading="eager"
                     fetchPriority="high"
+                    decoding="async"
                 />
                 <div className="contact-bg-overlay" />
                 <div className="contact-bg-vignette" />

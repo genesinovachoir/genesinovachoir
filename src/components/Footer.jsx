@@ -205,7 +205,7 @@ const Footer = () => {
                         <div>
                             <span className="footer-col-title">{t('footer.creative_works')}</span>
                             <div className="footer-links">
-                                <Link to="/choir" className="footer-link">{t('footer.choir')}</Link>
+                                <Link to={`/${lang}/about`} className="footer-link">{t('footer.choir')}</Link>
                                 <Link to={`/${lang}/podcast`} className="footer-link">{t('header.podcast')}</Link>
                                 <Link to={`/${lang}/media`} className="footer-link">{t('header.media')}</Link>
                                 <Link to={`/${lang}/blog`} className="footer-link">{t('header.blog')}</Link>

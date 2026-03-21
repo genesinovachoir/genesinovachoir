@@ -1,10 +1,8 @@
 import manifest from '../lib/media/manifest.json';
 
-const blogMain = manifest['blog-hero'];
 const choirImg = manifest['choir-hero'];
 const podcastImg = manifest['podcast-hero'];
 const blogSmall = manifest['blog-hero'];
-const choirSmall = manifest['choir-hero'];
 
 /**
  * Blog posts with bilingual content and SEO slugs.
@@ -110,7 +108,7 @@ export const POSTS = [
         excerptTr: "Çağdaş besteci Eric Whitacre ile koro müziğinin dijital çağda nereye gittiğini konuştuk.",
         category: "Interviews",
         categoryTr: "Röportajlar",
-        image: choirSmall,
+        image: choirImg,
         date: "Nov 15, 2024",
         dateTr: "15 Kas 2024",
         readTime: "12 min read",

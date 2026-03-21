@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import OptimizedImage from './OptimizedImage';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
@@ -18,32 +17,22 @@ const Header = () => {
     // Extract lang from URL path
     const pathParts = location.pathname.split('/').filter(Boolean);
     const lang = ['tr', 'en'].includes(pathParts[0]) ? pathParts[0] : 'tr';
-    const altLang = lang === 'tr' ? 'en' : 'tr';
 
     // Determine current page from URL (after lang prefix)
     const currentPage = pathParts[1] || 'home';
 
-    const isStorePage = currentPage === 'store';
-    const isCollabPage = currentPage === 'collab';
-    const isBlogPage = currentPage === 'blog';
-    const isMediaPage = currentPage === 'media';
-    const isPodcastPage = currentPage === 'podcast';
-    const isContactPage = currentPage === 'contact';
-    const isAboutPage = currentPage === 'about';
-
     React.useEffect(() => {
+        const pageSection = currentPage !== 'home' ? currentPage : null;
+
+        if (pageSection) {
+            setActiveSection(pageSection);
+        }
+
         const handleScroll = () => {
             setIsSticky(window.scrollY > 50);
 
-            if (isStorePage) { setActiveSection('store'); return; }
-            if (isAboutPage) { setActiveSection('about'); return; }
-            if (isCollabPage) { setActiveSection('collab'); return; }
-            if (isBlogPage) { setActiveSection('blog'); return; }
-            if (isMediaPage) { setActiveSection('media'); return; }
-            if (isPodcastPage) { setActiveSection('podcast'); return; }
-            if (isContactPage) { setActiveSection('contact'); return; }
+            if (pageSection) return;
 
-            // Active section logic for Homepage
             const sections = ['home', 'about', 'media', 'podcast', 'contact'];
             let current = 'home';
 
@@ -57,14 +46,14 @@ const Header = () => {
                     }
                 }
             }
-            setActiveSection(current);
+            setActiveSection(prev => prev !== current ? current : prev);
         };
 
         window.addEventListener('scroll', handleScroll);
         handleScroll();
 
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isStorePage, isCollabPage, isBlogPage, isMediaPage, isPodcastPage, isContactPage, isAboutPage]);
+    }, [currentPage]);
 
     // Lock body scroll when mobile menu is open
     React.useEffect(() => {
@@ -84,7 +73,7 @@ const Header = () => {
         const sectionId = item.toLowerCase();
         setIsMenuOpen(false);
 
-        const isOnSubPage = isStorePage || isCollabPage || isBlogPage || isMediaPage || isContactPage || isPodcastPage || isAboutPage;
+        const isOnSubPage = currentPage !== 'home';
 
         if (sectionId === 'home') {
             if (isOnSubPage) {
@@ -149,7 +138,7 @@ const Header = () => {
                 <div className="header-content">
                     <div className="logo-container">
                         <a href={`/${lang}/`} onClick={(e) => { e.preventDefault(); navigate(`/${lang}/`); setIsMenuOpen(false); }}>
-                            <OptimizedImage
+                            <img
                                 src="/genesi_nova.svg"
                                 alt="Genesi Nova Logo"
                                 className="header-logo"

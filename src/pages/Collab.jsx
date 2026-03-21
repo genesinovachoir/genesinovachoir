@@ -392,7 +392,7 @@ const Collab = () => {
                                             id="collab-name"
                                             type="text"
                                             value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                             disabled={!selectedOption || status === 'submitting'}
                                             required
                                         />
@@ -403,7 +403,7 @@ const Collab = () => {
                                             id="collab-email"
                                             type="email"
                                             value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                                             disabled={!selectedOption || status === 'submitting'}
                                             required
                                         />
@@ -416,7 +416,7 @@ const Collab = () => {
                                         id="collab-message"
                                         rows="5"
                                         value={formData.message}
-                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                                         placeholder={
                                             selectedOption
                                                 ? collaborationOptions.find(o => o.id === selectedOption)?.placeholder

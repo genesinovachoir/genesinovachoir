@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useAnimation, useMotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import './EventCalendar.css';
 
@@ -82,8 +82,6 @@ const EventCalendar = () => {
     const [itemsPerPage, setItemsPerPage] = useState(3);
     const [gap, setGap] = useState(32); // 2rem = 32px
     const trackRef = useRef(null);
-    const controls = useAnimation();
-    const x = useMotionValue(0);
 
     // Responsive Logic
     useEffect(() => {

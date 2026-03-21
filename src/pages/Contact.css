@@ -41,9 +41,9 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(to bottom,
-            rgba(5, 6, 10, 0.4) 0%,
-            rgba(5, 6, 10, 0.2) 20%,
-            rgba(5, 6, 10, 0.8) 100%);
+            rgba(5, 6, 10, 0.05) 0%,
+            rgba(5, 6, 10, 0.15) 20%,
+            rgba(5, 6, 10, 0.75) 100%);
 }
 
 .contact-bg-vignette {

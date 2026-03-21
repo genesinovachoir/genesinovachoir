@@ -113,11 +113,11 @@ const HeroTypewriterHeadlines = ({
         }
 
         if (isDeleting && displayText === '') {
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 setIsDeleting(false);
                 setCurrentIndex((prev) => (prev + 1) % headlines.length);
             }, 0);
-            return;
+            return () => clearTimeout(timer);
         }
 
         const timeout = setTimeout(() => {

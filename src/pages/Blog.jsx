@@ -3,14 +3,12 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ScrollReveal from '../components/ScrollReveal';
-import TypewriterText from '../components/TypewriterText';
 import OptimizedImage from '../components/OptimizedImage';
 import HeroTypewriterHeadlines from '../components/HeroTypewriterHeadlines';
 import SEOHead from '../components/SEOHead';
 import { POSTS, getLocalizedPost } from '../data/blogPosts';
 import './Blog.css';
 
-import manifest from '../lib/media/manifest.json';
 import instagramIcon from '../assets/icons/instagram.svg';
 import twitterIcon from '../assets/icons/twitter.svg';
 

@@ -4,7 +4,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import LanguageSync from './components/LanguageSync';
-import CookieConsent from './components/CookieConsent';
 
 const Home = lazy(() => import('./pages/Home'));
 const Store = lazy(() => import('./pages/Store'));
@@ -49,7 +48,6 @@ function App() {
           </Routes>
         </Suspense>
         <Footer />
-        <CookieConsent />
       </div>
     </Router>
   );
