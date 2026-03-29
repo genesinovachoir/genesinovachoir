@@ -458,7 +458,9 @@
 /* Tablet & Mobile Stack */
 @media (max-width: 900px) {
 
-
+    .contact-bg-container {
+        position: absolute;
+    }
 
     .contact-grid {
         grid-template-columns: 1fr;

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import IntroOverlay from '../components/about/IntroOverlay';
 import StarfieldBackground from '../components/about/StarfieldBackground';
+import { MembersSection } from '../components/about/MembersSection';
 import SEOHead from '../components/SEOHead';
 import './About.css';
 
@@ -145,6 +146,9 @@ const About = () => {
                                 </p>
                             </motion.section>
                         ))}
+
+                        {/* Members */}
+                        <MembersSection />
 
                         {/* Replay */}
                         <motion.div

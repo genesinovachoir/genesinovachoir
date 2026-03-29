@@ -236,6 +236,17 @@
                 "label": "KOLEKTİF",
                 "title": "Bireyler Değil, Bir Ses",
                 "body": "Her birimiz farklı bir renk taşır. Ama sahneye çıktığımızda, bu renkler tek bir sese dönüşür — Genesi Nova'nın sesi."
+            },
+            "members": {
+                "label": "KOLEKTİFİMİZ",
+                "title": "Sesler",
+                "conductor_badge": "Şef",
+                "voice_groups": {
+                    "Soprano": "Soprano",
+                    "Alto": "Alto",
+                    "Tenor": "Tenor",
+                    "Bass": "Bas"
+                }
             }
         },
         "aboutIntro": {

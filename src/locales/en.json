@@ -235,6 +235,17 @@
                 "label": "COLLECTIVE",
                 "title": "Not Individuals, One Voice",
                 "body": "Each of us carries a different color. But when we step on stage, those colors merge into a single sound — the voice of Genesi Nova."
+            },
+            "members": {
+                "label": "OUR COLLECTIVE",
+                "title": "The Voices",
+                "conductor_badge": "Conductor",
+                "voice_groups": {
+                    "Soprano": "Soprano",
+                    "Alto": "Alto",
+                    "Tenor": "Tenor",
+                    "Bass": "Bass"
+                }
             }
         },
         "aboutIntro": {
