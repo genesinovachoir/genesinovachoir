@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getEventBySlug, MEDIA_EVENTS } from '../data/mediaEvents';
+import { getEventBySlug } from '../data/mediaEvents';
 import OptimizedImage from '../components/OptimizedImage';
 import SEOHead, { DOMAIN } from '../components/SEOHead';
 import JsonLd from '../components/JsonLd';
@@ -120,9 +120,6 @@ const MediaDetail = () => {
         inLanguage: lang === 'tr' ? 'tr-TR' : 'en-US',
     };
 
-    // Related events (exclude current)
-    const relatedEvents = MEDIA_EVENTS.filter((e) => e.id !== event.id);
-
     return (
         <div className="media-page">
             <SEOHead
@@ -230,7 +227,7 @@ const MediaDetail = () => {
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
                     <div style={{ position: 'relative' }}>
-                        <div 
+                        <div
                             className="media-detail-gallery"
                             onScroll={(e) => {
                                 const scrollLeft = e.target.scrollLeft;
@@ -260,16 +257,16 @@ const MediaDetail = () => {
                                 </div>
                             ))}
                         </div>
-                        
+
                         {/* Dots Indicator (Mobile Only) */}
                         {imageFiles.length > 1 && (
                             <div className="media-detail-gallery-dots">
                                 {imageFiles.map((_, idx) => (
-                                    <div 
-                                        key={idx} 
+                                    <div
+                                        key={idx}
                                         style={{
-                                            width: '6px', 
-                                            height: '6px', 
+                                            width: '6px',
+                                            height: '6px',
                                             borderRadius: '50%',
                                             background: idx === visibleImageIndex ? '#bab4a2' : 'rgba(186,180,162,0.3)',
                                             transition: 'background 0.3s ease'
@@ -386,62 +383,6 @@ const MediaDetail = () => {
                     </div>
                 )}
 
-                {/* Related events */}
-                {relatedEvents.length > 0 && (
-                    <section
-                        style={{
-                            marginTop: '3rem',
-                            paddingTop: '3rem',
-                            borderTop: '1px solid rgba(186, 180, 162, 0.15)',
-                        }}
-                    >
-                        <h2
-                            style={{
-                                color: '#bab4a2',
-                                fontSize: '1.1rem',
-                                fontWeight: 400,
-                                letterSpacing: '0.1em',
-                                textTransform: 'uppercase',
-                                marginBottom: '2rem',
-                            }}
-                        >
-                            {lang === 'tr' ? 'Diğer Etkinlikler' : 'Other Events'}
-                        </h2>
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                                gap: '1.5rem',
-                            }}
-                        >
-                            {relatedEvents.map((relEvent) => (
-                                <Link
-                                    key={relEvent.id}
-                                    to={`/${lang}/media/${relEvent.slug}`}
-                                    style={{ textDecoration: 'none' }}
-                                >
-                                    <div className="media-card" style={{ cursor: 'pointer' }}>
-                                        <div className="media-thumb-wrapper">
-                                            <OptimizedImage
-                                                src={relEvent.images[0]}
-                                                alt={t(relEvent.titleKey)}
-                                                className="media-thumb"
-                                            />
-                                            <div className="media-overlay">
-                                                <span className="media-category">
-                                                    {t(relEvent.categoryKey)}
-                                                </span>
-                                                <h3 className="media-item-title">
-                                                    {t(relEvent.titleKey)}
-                                                </h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </section>
-                )}
             </main>
 
             {/* Unified Lightbox Overlay */}
