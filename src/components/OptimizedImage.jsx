@@ -22,6 +22,7 @@ const OptimizedImage = ({
     priority = false,
     sizes = "100vw",
     style = {},
+    imgStyle = {},
     fill = false,
     ...props
 }) => {
@@ -115,7 +116,7 @@ const OptimizedImage = ({
                     zIndex: 1,
                     opacity: isLoaded ? 1 : 0,
                     transition: 'opacity 0.5s ease-in-out',
-                    ...props.style
+                    ...imgStyle
                 }}
             />
         </div>

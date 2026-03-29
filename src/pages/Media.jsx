@@ -68,23 +68,15 @@ const Media = () => {
                                                     src={event.images[0]}
                                                     alt={t(event.titleKey)}
                                                     className="media-thumb"
+                                                    imgStyle={event.coverPosition ? { objectPosition: event.coverPosition } : {}}
                                                 />
-
-                                                <div className="media-expand-icon">
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                                                    </svg>
-                                                </div>
-
-                                                <div className="media-overlay">
-                                                    <span className="media-category">{t(event.categoryKey)}</span>
-                                                    <h3 className="media-item-title">{t(event.titleKey)}</h3>
-                                                    <span className="media-cta-hint">{t('media.view_event')} →</span>
-                                                </div>
                                             </div>
                                             <div className="event-info-snippet">
+                                                <span className="media-category">{t(event.categoryKey)}</span>
+                                                <h3 className="media-item-title">{t(event.titleKey)}</h3>
                                                 <div className="event-meta">
                                                     <span className="event-date">{t(event.dateKey)}</span>
+                                                    <span className="media-cta-hint">{t('media.view_event')}</span>
                                                 </div>
                                             </div>
                                         </div>

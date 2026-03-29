@@ -6,7 +6,6 @@ import HeroSection from '../components/HeroSection';
 import ImpactCTA from '../components/ImpactCTA';
 import FeaturedPerformance from '../components/FeaturedPerformance';
 import EventCalendar from '../components/EventCalendar';
-import BlogUpdates from '../components/BlogUpdates';
 
 const Home = () => {
     const { lang } = useParams();
@@ -57,7 +56,6 @@ const Home = () => {
 
             <FeaturedPerformance />
             <EventCalendar />
-            <BlogUpdates />
         </main>
     );
 };

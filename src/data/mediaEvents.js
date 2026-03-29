@@ -12,7 +12,9 @@ export const MEDIA_EVENTS = [
         descriptionKey: 'media.events.holyween.description',
         linkKey: 'media.events.holyween.link',
         venue: 'En Passant, Beyoğlu',
+        coverPosition: '75% center',
         images: [
+            'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945198/4_tfchzd.jpg',
             'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945200/10_zbkzcd.jpg',
             'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945202/11_lbchr0.jpg',
             'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945202/8_pbopqq.jpg',
@@ -20,7 +22,6 @@ export const MEDIA_EVENTS = [
             'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945200/7_q8k0e5.jpg',
             'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945199/6_o9a5tp.jpg',
             'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945198/5_g4fqc3.jpg',
-            'https://res.cloudinary.com/dfwioqqgc/image/upload/v1766945198/4_tfchzd.jpg',
             'https://res.cloudinary.com/dfwioqqgc/video/upload/v1766945650/IMG_6199_hvib3p.mov',
             'https://res.cloudinary.com/dfwioqqgc/video/upload/v1766945639/IMG_6171_izcsrn.mov'
         ],
