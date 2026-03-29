@@ -55,8 +55,8 @@ const IntroOverlay = ({ onComplete }) => {
         if (!audioRef.current) return;
         clearVolumeInterval();
 
-        const fadeTime = 400;
-        const steps = 20;
+        const fadeTime = 1500;
+        const steps = 40;
         const stepTime = fadeTime / steps;
         const startVol = audioRef.current.volume;
         const volStep = startVol / steps;
@@ -156,16 +156,19 @@ const IntroOverlay = ({ onComplete }) => {
         return () => clearTimeout(timer);
     }, [stepIndex, isExiting, showLogo, handleComplete]);
 
-    // Logo hold timer
+    // Logo hold timer — start fade when logo appears, complete after hold
     useEffect(() => {
         if (!showLogo || isExiting) return;
+
+        // Start fading audio as soon as logo is shown
+        fadeOutAudio();
 
         const timer = setTimeout(() => {
             handleComplete();
         }, LOGO_DISPLAY_DURATION);
 
         return () => clearTimeout(timer);
-    }, [showLogo, isExiting, handleComplete]);
+    }, [showLogo, isExiting, handleComplete, fadeOutAudio]);
 
     const handleSkip = () => {
         handleComplete();
