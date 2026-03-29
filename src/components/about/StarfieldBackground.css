@@ -1,8 +1,8 @@
 /* ===========================================
-   STARFIELD — Cinematic Galaxy
+   STARFIELD — Cinematic Galaxy  (Optimized)
    CSS-only · OKLCH color space · GPU-composited
    Dark void — stars are the light source
-   No warp streaks · 10 comets (LTR + RTL + steep)
+   No warp streaks · 6 comets (LTR + RTL)
 =========================================== */
 
 /* ── Container ── */
@@ -16,6 +16,13 @@
     isolation: isolate;
 }
 
+/* ── Off-screen pause ── */
+.starfield--paused .starfield-layer,
+.starfield--paused .starfield-nebula,
+.starfield--paused .starfield-comet {
+    animation-play-state: paused;
+}
+
 /* ── Shared layer base ── */
 .starfield-layer {
     position: absolute;
@@ -23,6 +30,7 @@
     transform-origin: 50% 50%;
     will-change: transform, opacity;
     backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 
@@ -37,6 +45,8 @@
     mix-blend-mode: screen;
     animation: nebulaBreathe 13s ease-in-out infinite;
     will-change: transform, opacity;
+    contain: layout style paint;
+    transform: translateZ(0);
     background:
         /* 1. White nucleus — barely visible */
         radial-gradient(ellipse 18% 12% at 50% 50%,
@@ -181,60 +191,52 @@
 
 /* ═══════════════════════════════════════════
    GLOW LAYERS — animated halo stars
-   Split into 3 sub-layers with warp animation
-   so they appear/grow/fade like the other stars.
-   Smaller halos, spread positions, depth via speed.
+   Consolidated: glow-ab (6 stars, ~10s)
+                 glow-c  (2 stars, 5.5s)
 ════════════════════════════════════════════ */
 
-/* Glow A — Far/slow · 3 stars · 12s */
-.starfield-layer--glow-a {
+/* Glow AB — merged far+mid · 6 stars · 10s */
+.starfield-layer--glow-ab {
     background-image:
-        /* warm white, subtle rose halo */
+        /* from glow-a: warm white, subtle rose halo */
         radial-gradient(circle at 22% 28%,
             oklch(100% 0 0    / 0.90)  0px,
             oklch(100% 0 0    / 0.55)  1.5px,
             oklch(88% 0.07 345 / 0.22) 4px,
             oklch(72% 0.12 340 / 0.06) 10px,
             transparent 18px),
-        /* cold blue */
+        /* from glow-a: cold blue */
         radial-gradient(circle at 72% 65%,
             oklch(100% 0 0    / 0.85)  0px,
             oklch(90% 0.06 240 / 0.40) 1.5px,
             oklch(72% 0.10 240 / 0.12) 4px,
             transparent 14px),
-        /* soft lavender */
+        /* from glow-a: soft lavender */
         radial-gradient(circle at 55% 18%,
             oklch(100% 0 0    / 0.82)  0px,
             oklch(90% 0.07 300 / 0.35) 1.5px,
             oklch(70% 0.12 295 / 0.10) 4px,
-            transparent 12px);
-    background-size: 100% 100%;
-    animation: warpGlowFar 12s linear infinite;
-}
-
-/* Glow B — Mid · 3 stars · 8s */
-.starfield-layer--glow-b {
-    background-image:
-        /* warm amber with bloom */
+            transparent 12px),
+        /* from glow-b: warm amber with bloom */
         radial-gradient(circle at 38% 72%,
             oklch(100% 0 0    / 0.92)  0px,
             oklch(95% 0.05 80  / 0.48) 2px,
             oklch(80% 0.08 60  / 0.14) 6px,
             transparent 16px),
-        /* rose-tinted */
+        /* from glow-b: rose-tinted */
         radial-gradient(circle at 78% 32%,
             oklch(100% 0 0    / 0.88)  0px,
             oklch(90% 0.07 300 / 0.42) 1.5px,
             oklch(75% 0.14 340 / 0.14) 5px,
             transparent 14px),
-        /* pure white bright */
+        /* from glow-b: pure white bright */
         radial-gradient(circle at 15% 55%,
             oklch(100% 0 0    / 0.95)  0px,
             oklch(100% 0 0    / 0.50)  2px,
             oklch(95% 0.04 280 / 0.16) 5px,
             transparent 14px);
     background-size: 100% 100%;
-    animation: warpGlowMid 8s linear infinite;
+    animation: warpGlowAB 10s linear infinite;
 }
 
 /* Glow C — Near/fast · 2 stars · 5.5s */
@@ -257,62 +259,59 @@
     animation: warpGlowNear 5.5s linear infinite;
 }
 
-/* Glow warp keyframes — same technique as main layers */
-@keyframes warpGlowFar {
-    0%   { transform: scale(0.70); opacity: 0; }
-    15%  { opacity: 0.45; }
-    60%  { opacity: 0.65; }
-    100% { transform: scale(1.50); opacity: 0; }
-}
-
-@keyframes warpGlowMid {
-    0%   { transform: scale(0.45); opacity: 0; }
-    12%  { opacity: 0.55; }
-    50%  { opacity: 0.80; }
-    100% { transform: scale(1.85); opacity: 0; }
+/* Glow warp keyframes */
+@keyframes warpGlowAB {
+    0%   { transform: scale(0.55) translateZ(0); opacity: 0; }
+    14%  { opacity: 0.50; }
+    55%  { opacity: 0.72; }
+    100% { transform: scale(1.65) translateZ(0); opacity: 0; }
 }
 
 @keyframes warpGlowNear {
-    0%   { transform: scale(0.10); opacity: 0; }
+    0%   { transform: scale(0.10) translateZ(0); opacity: 0; }
     10%  { opacity: 0.70; }
     65%  { opacity: 0.35; }
-    100% { transform: scale(3.50); opacity: 0; }
+    100% { transform: scale(3.50) translateZ(0); opacity: 0; }
 }
 
 
 /* ═══════════════════════════════════════════
    PARALLAX KEYFRAMES — center-out depth
+   translateZ(0) in keyframes keeps GPU layer
 ════════════════════════════════════════════ */
 @keyframes warpFar {
-    0%   { transform: scale(0.65); opacity: 0.12; }
+    0%   { transform: scale(0.65) translateZ(0); opacity: 0.12; }
     55%  { opacity: 0.55; }
-    100% { transform: scale(1.45); opacity: 0; }
+    100% { transform: scale(1.45) translateZ(0); opacity: 0; }
 }
 
 @keyframes warpMid {
-    0%   { transform: scale(0.42); opacity: 0.08; }
+    0%   { transform: scale(0.42) translateZ(0); opacity: 0.08; }
     38%  { opacity: 0.78; }
-    100% { transform: scale(1.90); opacity: 0; }
+    100% { transform: scale(1.90) translateZ(0); opacity: 0; }
 }
 
 @keyframes warpNear {
-    0%   { transform: scale(0.06); opacity: 0; }
+    0%   { transform: scale(0.06) translateZ(0); opacity: 0; }
     10%  { opacity: 1.0; }
     80%  { opacity: 0.40; }
-    100% { transform: scale(4.20); opacity: 0; }
+    100% { transform: scale(4.20) translateZ(0); opacity: 0; }
 }
 
 
 /* ═══════════════════════════════════════════
    COMETS — glowing heads + gradient tails
    ::before = tail    ::after = head glow
-   1–4: LTR  |  5–7: RTL  |  8–10: steep
+   Reduced to 6: 1–4 LTR, 5 RTL, 7 RTL
+   No filter:blur, box-shadow reduced to 2 layers
 ════════════════════════════════════════════ */
 .starfield-comet {
     position: absolute;
     left: 0;
     pointer-events: none;
     opacity: 0;
+    will-change: transform, opacity;
+    transform: translateZ(0);
     animation: cometFly var(--comet-duration, 36s) linear infinite;
     animation-delay: var(--comet-delay, 0s);
     animation-fill-mode: backwards;
@@ -324,15 +323,9 @@
 .starfield-comet--3  { top: 36%; --comet-angle: -22deg; --comet-delay: 10s; --comet-duration: 38s; }
 .starfield-comet--4  { top: 82%; --comet-angle:  -5deg; --comet-delay: 28s; --comet-duration: 43s; }
 
-/* ── RTL comets — scaleX(-1) mirrors element: head leads left, tail trails right ── */
+/* ── RTL comets — scaleX(-1) mirrors element ── */
 .starfield-comet--5  { top: 28%; --comet-angle:  10deg; --comet-delay:  7s; --comet-duration: 29s; animation-name: cometFlyRTL; }
-.starfield-comet--6  { top: 55%; --comet-angle:   6deg; --comet-delay: 22s; --comet-duration: 36s; animation-name: cometFlyRTL; }
 .starfield-comet--7  { top: 72%; --comet-angle:  14deg; --comet-delay: 15s; --comet-duration: 41s; animation-name: cometFlyRTL; }
-
-/* ── Steep angle comets ── */
-.starfield-comet--8  { top:  5%; --comet-angle:  62deg; --comet-delay:  4s; --comet-duration: 27s; }
-.starfield-comet--9  { top:  8%; --comet-angle: -68deg; --comet-delay: 33s; --comet-duration: 32s; animation-name: cometFlyRTL; }
-.starfield-comet--10 { top:  3%; --comet-angle:  48deg; --comet-delay: 12s; --comet-duration: 44s; }
 
 /* ── Pseudo-element base ── */
 .starfield-comet::before {
@@ -360,15 +353,13 @@
         oklch(47% 0.22 300 / 0.06)          35%,
         oklch(78% 0.18 340 / 0.52)          80%,
         oklch(100% 0 0 / 0.88)             100%);
-    filter: blur(0.4px);
 }
 .starfield-comet--1::after {
     width: 5px; height: 5px;
     background: oklch(100% 0 0);
     box-shadow:
         0 0  6px  3px oklch(88% 0.09 345 / 0.92),
-        0 0 14px  6px oklch(78% 0.18 340 / 0.65),
-        0 0 28px 10px oklch(47% 0.22 300 / 0.38);
+        0 0 14px  6px oklch(78% 0.18 340 / 0.65);
 }
 
 /* Comet 2 — small · lavender */
@@ -379,15 +370,13 @@
         oklch(47% 0.22 300 / 0.05)          40%,
         oklch(90% 0.07 300 / 0.55)          80%,
         oklch(100% 0 0 / 0.82)             100%);
-    filter: blur(0.3px);
 }
 .starfield-comet--2::after {
     width: 3px; height: 3px;
     background: oklch(97% 0.02 300);
     box-shadow:
         0 0  5px  2px oklch(90% 0.07 300 / 0.88),
-        0 0 10px  4px oklch(72% 0.13 300 / 0.58),
-        0 0 20px  7px oklch(47% 0.22 300 / 0.32);
+        0 0 10px  4px oklch(72% 0.13 300 / 0.58);
 }
 
 /* Comet 3 — medium · cold blue */
@@ -398,15 +387,13 @@
         oklch(40% 0.16 240 / 0.06)          42%,
         oklch(88% 0.07 240 / 0.58)          80%,
         oklch(100% 0 0 / 0.90)             100%);
-    filter: blur(0.35px);
 }
 .starfield-comet--3::after {
     width: 4px; height: 4px;
     background: oklch(100% 0 0);
     box-shadow:
         0 0  5px  2px oklch(88% 0.07 240 / 0.92),
-        0 0 12px  5px oklch(65% 0.13 240 / 0.58),
-        0 0 24px  8px oklch(45% 0.16 240 / 0.32);
+        0 0 12px  5px oklch(65% 0.13 240 / 0.58);
 }
 
 /* Comet 4 — large · warm white */
@@ -417,15 +404,13 @@
         oklch(55% 0.14 25 / 0.05)           32%,
         oklch(90% 0.07 80 / 0.48)           76%,
         oklch(100% 0 0 / 0.92)             100%);
-    filter: blur(0.5px);
 }
 .starfield-comet--4::after {
     width: 6px; height: 6px;
     background: oklch(100% 0 0);
     box-shadow:
         0 0  7px  3px oklch(95% 0.05 80 / 0.88),
-        0 0 16px  6px oklch(82% 0.10 60 / 0.58),
-        0 0 32px 11px oklch(60% 0.15 25 / 0.32);
+        0 0 16px  6px oklch(82% 0.10 60 / 0.58);
 }
 
 /* Comet 5 — RTL · medium · cold blue */
@@ -436,34 +421,13 @@
         oklch(40% 0.14 240 / 0.05)          38%,
         oklch(85% 0.08 240 / 0.55)          78%,
         oklch(100% 0 0 / 0.86)             100%);
-    filter: blur(0.35px);
 }
 .starfield-comet--5::after {
     width: 4px; height: 4px;
     background: oklch(100% 0 0);
     box-shadow:
         0 0  5px  2px oklch(90% 0.06 240 / 0.90),
-        0 0 12px  5px oklch(68% 0.12 240 / 0.55),
-        0 0 22px  8px oklch(48% 0.14 240 / 0.28);
-}
-
-/* Comet 6 — RTL · small · lavender */
-.starfield-comet--6::before {
-    width: 130px; right: 3px;
-    background: linear-gradient(to right,
-        transparent                          0%,
-        oklch(45% 0.18 300 / 0.04)          40%,
-        oklch(88% 0.08 300 / 0.52)          80%,
-        oklch(100% 0 0 / 0.80)             100%);
-    filter: blur(0.3px);
-}
-.starfield-comet--6::after {
-    width: 3px; height: 3px;
-    background: oklch(95% 0.04 300);
-    box-shadow:
-        0 0  4px  2px oklch(88% 0.08 300 / 0.85),
-        0 0  9px  4px oklch(70% 0.12 295 / 0.52),
-        0 0 18px  6px oklch(50% 0.18 290 / 0.28);
+        0 0 12px  5px oklch(68% 0.12 240 / 0.55);
 }
 
 /* Comet 7 — RTL · large · warm white */
@@ -474,72 +438,13 @@
         oklch(52% 0.12 25 / 0.04)           30%,
         oklch(88% 0.06 75 / 0.46)           74%,
         oklch(100% 0 0 / 0.90)             100%);
-    filter: blur(0.45px);
 }
 .starfield-comet--7::after {
     width: 5px; height: 5px;
     background: oklch(100% 0 0);
     box-shadow:
         0 0  6px  3px oklch(94% 0.04 75 / 0.85),
-        0 0 14px  5px oklch(80% 0.09 55 / 0.55),
-        0 0 28px 10px oklch(58% 0.13 25 / 0.28);
-}
-
-/* Comet 8 — steep LTR · medium · rose */
-.starfield-comet--8::before {
-    width: 155px; right: 4px;
-    background: linear-gradient(to right,
-        transparent                          0%,
-        oklch(42% 0.20 330 / 0.05)          38%,
-        oklch(80% 0.16 340 / 0.54)          78%,
-        oklch(100% 0 0 / 0.86)             100%);
-    filter: blur(0.35px);
-}
-.starfield-comet--8::after {
-    width: 4px; height: 4px;
-    background: oklch(100% 0 0);
-    box-shadow:
-        0 0  5px  2px oklch(88% 0.10 345 / 0.88),
-        0 0 11px  5px oklch(72% 0.16 335 / 0.55),
-        0 0 22px  8px oklch(50% 0.20 325 / 0.28);
-}
-
-/* Comet 9 — steep RTL · small · cold */
-.starfield-comet--9::before {
-    width: 120px; right: 3px;
-    background: linear-gradient(to right,
-        transparent                          0%,
-        oklch(38% 0.14 255 / 0.04)          42%,
-        oklch(86% 0.07 250 / 0.50)          80%,
-        oklch(100% 0 0 / 0.80)             100%);
-    filter: blur(0.28px);
-}
-.starfield-comet--9::after {
-    width: 3px; height: 3px;
-    background: oklch(97% 0.02 255);
-    box-shadow:
-        0 0  4px  2px oklch(90% 0.06 250 / 0.82),
-        0 0  9px  3px oklch(68% 0.10 245 / 0.48),
-        0 0 17px  6px oklch(45% 0.13 240 / 0.24);
-}
-
-/* Comet 10 — steep LTR · medium · warm white */
-.starfield-comet--10::before {
-    width: 185px; right: 4px;
-    background: linear-gradient(to right,
-        transparent                          0%,
-        oklch(50% 0.10 50 / 0.04)           35%,
-        oklch(90% 0.06 70 / 0.50)           78%,
-        oklch(100% 0 0 / 0.88)             100%);
-    filter: blur(0.40px);
-}
-.starfield-comet--10::after {
-    width: 4px; height: 4px;
-    background: oklch(100% 0 0);
-    box-shadow:
-        0 0  5px  2px oklch(94% 0.04 80 / 0.86),
-        0 0 12px  5px oklch(80% 0.08 65 / 0.52),
-        0 0 24px  9px oklch(62% 0.12 40 / 0.26);
+        0 0 14px  5px oklch(80% 0.09 55 / 0.55);
 }
 
 /* LTR animation */
@@ -562,16 +467,18 @@
 
 
 /* ═══════════════════════════════════════════
-   GRAIN — fine noise overlay
+   GRAIN — fine noise overlay (optimized)
+   Larger tile, normal blend mode
 ════════════════════════════════════════════ */
 .starfield-grain {
     position: absolute;
     inset: 0;
     pointer-events: none;
+    contain: strict;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size: 280px 280px;
+    background-size: 400px 400px;
     opacity: 0.045;
-    mix-blend-mode: overlay;
+    mix-blend-mode: normal;
 }
 
 
@@ -582,6 +489,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
+    contain: strict;
     background: radial-gradient(ellipse 100% 100% at 50% 50%,
         transparent                        28%,
         oklch(4%  0.03 270 / 0.22)         52%,
@@ -598,8 +506,7 @@
     .starfield-layer--2 { animation-duration: 13s; }
     .starfield-layer--3 { animation-duration:  7s; }
 
-    .starfield-layer--glow-a,
-    .starfield-layer--glow-b,
+    .starfield-layer--glow-ab,
     .starfield-layer--glow-c {
         animation: none;
         opacity: 0.45;
@@ -617,9 +524,9 @@
     }
 
     @keyframes warpNear {
-        0%   { transform: scale(0.2); opacity: 0;    }
+        0%   { transform: scale(0.2) translateZ(0); opacity: 0;    }
         12%  { opacity: 0.85; }
-        100% { transform: scale(2.8); opacity: 0;    }
+        100% { transform: scale(2.8) translateZ(0); opacity: 0;    }
     }
 }
 
@@ -636,8 +543,7 @@
         transform: scale(1);
     }
 
-    .starfield-layer--glow-a,
-    .starfield-layer--glow-b,
+    .starfield-layer--glow-ab,
     .starfield-layer--glow-c {
         animation: none;
         opacity: 0.50;
