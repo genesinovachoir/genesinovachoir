@@ -72,7 +72,7 @@ const HeroSection = () => {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        objectPosition: 'center',
+                        objectPosition: 'center 60%',
                     }}
                 />
                 {/* Gradient overlay for text readability */}
