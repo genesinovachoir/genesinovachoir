@@ -14,7 +14,7 @@
   src: url('./assets/fonts/galaxy-script.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
   unicode-range: U+0020-007E, U+00C0-024F, U+0130, U+015E, U+011E, U+00DC, U+00D6, U+00C7, U+0131, U+015F, U+011F, U+00FC, U+00F6, U+00E7;
 }
 

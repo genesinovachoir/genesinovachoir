@@ -14,6 +14,13 @@
     z-index: 0;
     contain: strict;
     isolation: isolate;
+    /* Progressive reveal — hide initial GPU layer creation jank */
+    animation: starfieldReveal 0.8s ease-out 0.3s both;
+}
+
+@keyframes starfieldReveal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 /* ── Off-screen pause ── */
