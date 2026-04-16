@@ -15,7 +15,7 @@ export function useChoirMembers() {
             setError(null);
 
             const { data, error: fetchError } = await supabase
-                .from('choir_members')
+                .from('public_choir_members')
                 .select(`
                     id,
                     first_name,
