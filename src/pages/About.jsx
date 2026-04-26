@@ -15,9 +15,12 @@ const About = () => {
     const { lang } = useParams();
     const currentLang = lang || 'tr';
     const altLang = currentLang === 'tr' ? 'en' : 'tr';
+    const [phase, setPhase] = useState('content');
+    /* 
     const [phase, setPhase] = useState(() => {
         return sessionStorage.getItem('aboutIntroSeen') === '1' ? 'content' : 'hero';
     });
+    */
 
     // On mount: ensure we stay in sync if needed (though useState init handles it)
 
@@ -159,6 +162,7 @@ const About = () => {
                         <MembersSection />
 
                         {/* Replay */}
+                        {/* 
                         <motion.div
                             className="about-replay-wrapper"
                             initial={{ opacity: 0 }}
@@ -183,6 +187,7 @@ const About = () => {
                                 <span>{t('aboutIntro.replay')}</span>
                             </button>
                         </motion.div>
+                        */}
                     </motion.div>
                 )}
             </AnimatePresence>
